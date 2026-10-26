@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Progress | SkillOrbit</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .progress-page {
+      max-width: 850px;
+      margin: 35px auto;
+      padding: 20px;
+    }
+    .progress-card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 22px;
+      margin: 20px 0;
+    }
+    .progress-track {
+      background: #e5e7eb;
+      height: 14px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: #5145cd;
+      transition: width 0.3s;
+    }
+    .topic {
+      display: block;
+      margin: 14px 0;
+    }
+    .topic input { margin-right: 10px; }
+    .progress-page a {
+      color: #5145cd;
+    }
+  </style>
+</head>
+<body>
+  <main class="progress-page">
+    <h1>My Learning Progress</h1>
+    <p>Mark topics as completed and track your learning journey.</p>
+
+    <section class="progress-card">
+      <h2>Overall Progress: <span id="percentage">0%</span></h2>
+      <div
+        class="progress-track"
+        role="progressbar"
+        aria-label="Overall learning progress"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow="0"
+        id="progressBar"
+      >
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <p id="completedCount">0 of 12 topics completed</p>
+    </section>
+
+    <section class="progress-card">
+      <h2>Java</h2>
+      <label class="topic"><input type="checkbox" data-topic="java1"> Java basics</label>
+      <label class="topic"><input type="checkbox" data-topic="java2"> Conditions and loops</label>
+      <label class="topic"><input type="checkbox" data-topic="java3"> Arrays and strings</label>
+    </section>
+
+    <section class="progress-card">
+      <h2>Web Development</h2>
+      <label class="topic"><input type="checkbox" data-topic="web1"> HTML</label>
+      <label class="topic"><input type="checkbox" data-topic="web2"> CSS</label>
+      <label class="topic"><input type="checkbox" data-topic="web3"> JavaScript</label>
+    </section>
+
+    <section class="progress-card">
+      <h2>Python</h2>
+      <label class="topic"><input type="checkbox" data-topic="python1"> Python basics</label>
+      <label class="topic"><input type="checkbox" data-topic="python2"> Functions and loops</label>
+      <label class="topic"><input type="checkbox" data-topic="python3"> Lists and dictionaries</label>
+    </section>
+
+    <section class="progress-card">
+      <h2>DevOps</h2>
+      <label class="topic"><input type="checkbox" data-topic="devops1"> Git and GitHub</label>
+      <label class="topic"><input type="checkbox" data-topic="devops2"> Docker</label>
+      <label class="topic"><input type="checkbox" data-topic="devops3"> Jenkins</label>
+    </section>
+
+    <button type="button" id="resetProgress">Reset Progress</button>
+    <p><a href="index.html">← Back to Home</a></p>
+  </main>
+
+  <script>
+    const checkboxes = document.querySelectorAll("[data-topic]");
+    const percentage = document.getElementById("percentage");
+    const progressFill = document.getElementById("progressFill");
+    const progressBar = document.getElementById("progressBar");
+    const completedCount = document.getElementById("completedCount");
+    const storageKey = "skillorbit-progress";
+
+    let savedProgress = {};
+    try {
+      savedProgress = JSON.parse(localStorage.getItem(storageKey)) || {};
+    } catch {
+      savedProgress = {};
+    }
+
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = savedProgress[checkbox.dataset.topic] === true;
+
+      checkbox.addEventListener("change", () => {
+        savedProgress[checkbox.dataset.topic] = checkbox.checked;
+        localStorage.setItem(storageKey, JSON.stringify(savedProgress));
+        updateProgress();
+      });
+    });
+
+    function updateProgress() {
+      const total = checkboxes.length;
+      const completed = [...checkboxes].filter((checkbox) => checkbox.checked).length;
+      const percent = Math.round((completed / total) * 100);
+
+      percentage.textContent = percent + "%";
+      progressFill.style.width = percent + "%";
+      progressBar.setAttribute("aria-valuenow", percent);
+      completedCount.textContent = `${completed} of ${total} topics completed`;
+    }
+
+    document.getElementById("resetProgress").addEventListener("click", () => {
+      checkboxes.forEach((checkbox) => {
+        checkbox.checked = false;
+      });
+      savedProgress = {};
+      localStorage.removeItem(storageKey);
+      updateProgress();
+    });
+
+    updateProgress();
+  </script>
+</body>
+</html>
+
