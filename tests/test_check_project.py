@@ -8,7 +8,17 @@ ROOT = Path(__file__).resolve().parents[1]
 class SkillOrbitTests(unittest.TestCase):
 
     def test_website_files_exist(self):
-        for filename in ("index.html", "style.css", "script.js"):
+        files = (
+            "index.html",
+            "skills.html",
+            "roadmaps.html",
+            "progress.html",
+            "quiz.html",
+            "style.css",
+            "script.js",
+        )
+
+        for filename in files:
             with self.subTest(filename=filename):
                 self.assertTrue((ROOT / filename).is_file())
 
