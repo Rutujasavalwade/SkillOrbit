@@ -1,0 +1,157 @@
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: #17233c;
+    background: #f7f9ff;
+    line-height: 1.6;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 8%;
+    background: white;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4c4fe8;
+    text-decoration: none;
+}
+
+nav {
+    display: flex;
+    gap: 24px;
+}
+
+nav a {
+    color: #17233c;
+    text-decoration: none;
+}
+
+.hero {
+    padding: 80px 8%;
+    background: linear-gradient(120deg, #edf0ff, white);
+}
+
+.hero h1 {
+    font-size: clamp(38px, 6vw, 64px);
+    line-height: 1.1;
+    margin: 15px 0;
+}
+
+.hero p {
+    max-width: 560px;
+    color: #5b6579;
+}
+
+.eyebrow {
+    color: #4c4fe8;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 12px;
+}
+
+.primary-btn,
+button {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.primary-btn {
+    color: white;
+    background: #4c4fe8;
+}
+
+button {
+    color: #4c4fe8;
+    background: #edf0ff;
+}
+
+.section {
+    padding: 55px 8%;
+}
+
+.skill-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 20px;
+    margin-top: 25px;
+}
+
+.skill-card {
+    padding: 22px;
+    background: white;
+    border: 1px solid #e4e8f2;
+    border-radius: 14px;
+}
+
+.skill-card h3 {
+    margin-bottom: 8px;
+}
+
+.skill-card p {
+    color: #5b6579;
+}
+
+.skill-card a {
+    color: #4c4fe8;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.skill-card label {
+    display: block;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.progress-section {
+    background: white;
+}
+
+.progress-track {
+    height: 12px;
+    max-width: 600px;
+    overflow: hidden;
+    background: #e8ebf5;
+    border-radius: 10px;
+}
+
+#progress-bar {
+    width: 0;
+    height: 100%;
+    background: #4c4fe8;
+    transition: width 0.3s;
+}
+
+footer {
+    padding: 24px;
+    text-align: center;
+    color: #5b6579;
+}
+
+@media (max-width: 520px) {
+    .navbar {
+        align-items: flex-start;
+        gap: 12px;
+        flex-direction: column;
+    }
+}
