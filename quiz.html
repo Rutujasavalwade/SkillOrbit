@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skill Quiz | SkillOrbit</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .quiz-page { max-width: 800px; margin: 35px auto; padding: 20px; }
+    .quiz-card { background: white; border: 1px solid #ddd; border-radius: 12px; padding: 24px; margin: 20px 0; }
+    .option { display: block; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; }
+    .option:hover { background: #f1f0ff; }
+    .option input { margin-right: 10px; }
+    #feedback { font-weight: bold; margin-top: 15px; }
+    #result { font-size: 1.2rem; font-weight: bold; }
+    .quiz-page button { padding: 10px 18px; margin: 8px 8px 8px 0; border: 0; border-radius: 7px; background: #5145cd; color: white; cursor: pointer; }
+    .quiz-page button:disabled { background: #999; cursor: not-allowed; }
+    .quiz-page a { color: #5145cd; }
+  </style>
+</head>
+<body>
+  <main class="quiz-page">
+    <h1>SkillOrbit Skill Quiz</h1>
+    <p>Test your basic knowledge of programming and DevOps.</p>
+
+    <section class="quiz-card">
+      <p id="questionNumber">Question 1 of 5</p>
+      <h2 id="question">Loading question...</h2>
+      <div id="options"></div>
+      <p id="feedback" aria-live="polite"></p>
+      <button id="checkButton">Check Answer</button>
+      <button id="nextButton" disabled>Next Question</button>
+      <p id="result" aria-live="polite"></p>
+    </section>
+
+    <p><a href="index.html">← Back to Home</a></p>
+  </main>
+
+  <script>
+    const questions = [
+      {
+        question: "Which keyword is used to create a class in Java?",
+        options: ["function", "class", "define", "newclass"],
+        answer: 1,
+        explanation: "The class keyword declares a class in Java."
+      },
+      {
+        question: "Which language is commonly used to add interactivity to web pages?",
+        options: ["HTML", "CSS", "JavaScript", "SQL"],
+        answer: 2,
+        explanation: "JavaScript adds behavior and interactivity to web pages."
+      },
+      {
+        question: "What is Git mainly used for?",
+        options: ["Version control", "Image editing", "Browsing websites", "Creating databases"],
+        answer: 0,
+        explanation: "Git tracks changes in files and supports collaboration."
+      },
+      {
+        question: "What is Docker used for?",
+        options: ["Writing only CSS", "Running applications in containers", "Replacing Git", "Creating spreadsheets"],
+        answer: 1,
+        explanation: "Docker packages and runs applications in containers."
+      },
+      {
+        question: "What does a CI pipeline commonly do?",
+        options: ["Only changes website colors", "Deletes all source code", "Automatically builds and tests code", "Replaces programming"],
+        answer: 2,
+        explanation: "Continuous Integration automates steps such as building and testing code."
+      }
+    ];
+
+    let current = 0;
+    let score = 0;
+    let answered = false;
+
+    const questionElement = document.getElementById("question");
+    const numberElement = document.getElementById("questionNumber");
+    const optionsElement = document.getElementById("options");
+    const feedbackElement = document.getElementById("feedback");
+    const checkButton = document.getElementById("checkButton");
+    const nextButton = document.getElementById("nextButton");
+    const resultElement = document.getElementById("result");
+
+    function showQuestion() {
+      const item = questions[current];
+      answered = false;
+      numberElement.textContent = `Question ${current + 1} of ${questions.length}`;
+      questionElement.textContent = item.question;
+      feedbackElement.textContent = "";
+      resultElement.textContent = "";
+      optionsElement.replaceChildren();
+
+      item.options.forEach((option, index) => {
+        const label = document.createElement("label");
+        label.className = "option";
+
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = "answer";
+        radio.value = index;
+
+        label.append(radio, document.createTextNode(option));
+        optionsElement.append(label);
+      });
+
+      checkButton.disabled = false;
+      nextButton.disabled = true;
+      nextButton.textContent = current === questions.length - 1 ? "Show Result" : "Next Question";
+    }
+
+    checkButton.addEventListener("click", () => {
+      if (answered) return;
+
+      const selected = document.querySelector('input[name="answer"]:checked');
+      if (!selected) {
+        feedbackElement.textContent = "Please select an answer first.";
+        return;
+      }
+
+      const item = questions[current];
+      const isCorrect = Number(selected.value) === item.answer;
+      if (isCorrect) score++;
+
+      feedbackElement.textContent = (isCorrect ? "Correct! " : "Not quite. ") + item.explanation;
+      answered = true;
+      checkButton.disabled = true;
+      nextButton.disabled = false;
+    });
+
+    nextButton.addEventListener("click", () => {
+      if (!answered) return;
+
+      if (current < questions.length - 1) {
+        current++;
+        showQuestion();
+      } else {
+        numberElement.textContent = "Quiz completed!";
+        questionElement.textContent = "Your final score";
+        optionsElement.replaceChildren();
+        feedbackElement.textContent = "";
+        resultElement.textContent = `${score} out of ${questions.length} (${Math.round(score / questions.length * 100)}%)`;
+        checkButton.disabled = true;
+        nextButton.disabled = true;
+        nextButton.textContent = "Quiz Finished";
+      }
+    });
+
+    showQuestion();
+  </script>
+</body>
+</html>
