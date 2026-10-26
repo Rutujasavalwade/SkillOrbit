@@ -1,0 +1,214 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Skills | SkillOrbit</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .skills-page {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .skills-header {
+            margin-bottom: 28px;
+        }
+
+        .skills-header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .skills-search {
+            width: 100%;
+            max-width: 500px;
+            padding: 13px 16px;
+            margin: 18px 0;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .skill-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .skill-filters button {
+            padding: 9px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .skill-filters button.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .skill-card {
+            padding: 22px;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            background: white;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+        }
+
+        .skill-card h2 {
+            font-size: 1.2rem;
+            margin: 0 0 10px;
+        }
+
+        .skill-card p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .skill-card a {
+            color: #2563eb;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .no-results {
+            display: none;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <main class="skills-page">
+        <header class="skills-header">
+            <p>SKILLORBIT / LEARNING LIBRARY</p>
+            <h1>Explore Skills</h1>
+            <p>Discover technical skills and choose what you want to learn next.</p>
+
+            <input
+                type="search"
+                id="skillSearch"
+                class="skills-search"
+                placeholder="Search Java, Python, SQL..."
+                aria-label="Search skills"
+            >
+        </header>
+
+        <nav class="skill-filters" aria-label="Filter skills by category">
+            <button class="active" data-category="all">All Skills</button>
+            <button data-category="programming">Programming</button>
+            <button data-category="web">Web Development</button>
+            <button data-category="data">Data</button>
+            <button data-category="cloud">Cloud & DevOps</button>
+        </nav>
+
+        <section class="skills-grid" id="skillsGrid">
+            <article class="skill-card" data-category="programming">
+                <h2>Java</h2>
+                <p>Learn programming fundamentals, OOP, collections, and problem solving.</p>
+                <a href="roadmaps.html">Explore roadmap →</a>
+            </article>
+
+            <article class="skill-card" data-category="programming">
+                <h2>Python</h2>
+                <p>Learn Python syntax, functions, data structures, and automation.</p>
+                <a href="roadmaps.html">Explore roadmap →</a>
+            </article>
+
+            <article class="skill-card" data-category="web">
+                <h2>HTML, CSS & JavaScript</h2>
+                <p>Build interactive and responsive websites from scratch.</p>
+                <a href="roadmaps.html">Explore roadmap →</a>
+            </article>
+
+            <article class="skill-card" data-category="data">
+                <h2>SQL & Databases</h2>
+                <p>Learn queries, joins, database design, and data management.</p>
+                <a href="roadmaps.html">Explore roadmap →</a>
+            </article>
+
+            <article class="skill-card" data-category="cloud">
+                <h2>AWS Cloud</h2>
+                <p>Understand cloud computing, core AWS services, and deployment.</p>
+                <a href="roadmaps.html">Explore roadmap →</a>
+            </article>
+
+            <article class="skill-card" data-category="cloud">
+                <h2>DevOps</h2>
+                <p>Practice Git, Docker, Jenkins, CI/CD, and automation.</p>
+                <a href="roadmaps.html">Explore roadmap →</a>
+            </article>
+
+            <article class="skill-card" data-category="data">
+                <h2>Data Structures & Algorithms</h2>
+                <p>Practice arrays, strings, searching, sorting, and problem solving.</p>
+                <a href="roadmaps.html">Explore roadmap →</a>
+            </article>
+
+            <article class="skill-card" data-category="web">
+                <h2>React</h2>
+                <p>Discover components, props, state, and modern frontend development.</p>
+                <a href="roadmaps.html">Explore roadmap →</a>
+            </article>
+        </section>
+
+        <p class="no-results" id="noResults">No matching skills found. Try another search.</p>
+    </main>
+
+    <script>
+        const searchInput = document.getElementById("skillSearch");
+        const filterButtons = document.querySelectorAll(".skill-filters button");
+        const skillCards = document.querySelectorAll(".skill-card");
+        const noResults = document.getElementById("noResults");
+
+        let selectedCategory = "all";
+
+        function filterSkills() {
+            const searchText = searchInput.value.toLowerCase().trim();
+            let visibleCount = 0;
+
+            skillCards.forEach(function(card) {
+                const matchesSearch = card.textContent.toLowerCase().includes(searchText);
+                const matchesCategory =
+                    selectedCategory === "all" ||
+                    card.dataset.category === selectedCategory;
+
+                const shouldShow = matchesSearch && matchesCategory;
+                card.hidden = !shouldShow;
+
+                if (shouldShow) {
+                    visibleCount++;
+                }
+            });
+
+            noResults.style.display = visibleCount === 0 ? "block" : "none";
+        }
+
+        searchInput.addEventListener("input", filterSkills);
+
+        filterButtons.forEach(function(button) {
+            button.addEventListener("click", function() {
+                selectedCategory = button.dataset.category;
+
+                filterButtons.forEach(function(item) {
+                    item.classList.remove("active");
+                });
+
+                button.classList.add("active");
+                filterSkills();
+            });
+        });
+    </script>
+</body>
+</html>
